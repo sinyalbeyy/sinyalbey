@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Source {
+  ONEPERCENT_CLUB
+  BITGET_CLUB
+}
+
+enum Status {
+  NEW
+  REVIEWING
+  APPROVED
+  SENT
+  REJECTED
+}
+
+model Application {
+  id               String   @id @default(cuid())
+  source           Source
+  status           Status   @default(NEW)
+  telegramUsername  String
+  bitgetUid        String?
+  selectedPlan     String?
+  adminNote        String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([source])
+  @@index([status])
+  @@index([createdAt])
+}
