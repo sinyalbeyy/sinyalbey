@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X, Copy, Check, ChevronDown, ChevronUp, AlertTriangle, Loader2, CheckCircle, ArrowRight } from 'lucide-react';
+import confetti from 'canvas-confetti';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -12,6 +13,13 @@ interface PaymentModalProps {
   };
 }
 
+const STEPS = [
+  { id: 1, label: 'Plan' },
+  { id: 2, label: 'Ödeme' },
+  { id: 3, label: 'Bilgi' },
+  { id: 4, label: 'Tamam' },
+];
+
 const PaymentModal = ({ isOpen, onClose, selectedPlan }: PaymentModalProps) => {
   const [copied, setCopied] = useState(false);
   const [telegramUsername, setTelegramUsername] = useState('');
@@ -19,8 +27,52 @@ const PaymentModal = ({ isOpen, onClose, selectedPlan }: PaymentModalProps) => {
   const [guideOpen, setGuideOpen] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const [currentStep, setCurrentStep] = useState(1);
 
   const USDT_ADDRESS = process.env.NEXT_PUBLIC_USDT_TRC20_ADDRESS || 'ADRES_BULUNAMADI';
+
+  // Update step based on form state
+  useEffect(() => {
+    if (submitStatus === 'success') {
+      setCurrentStep(4);
+    } else if (telegramUsername.trim() && txId.trim()) {
+      setCurrentStep(3);
+    } else if (copied) {
+      setCurrentStep(2);
+    } else {
+      setCurrentStep(1);
+    }
+  }, [copied, telegramUsername, txId, submitStatus]);
+
+  // Trigger confetti on success
+  useEffect(() => {
+    if (submitStatus === 'success') {
+      const duration = 3000;
+      const end = Date.now() + duration;
+
+      const frame = () => {
+        confetti({
+          particleCount: 3,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0, y: 0.7 },
+          colors: ['#c9a84c', '#e0c56e', '#a68b3a', '#22c55e', '#4ade80'],
+        });
+        confetti({
+          particleCount: 3,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1, y: 0.7 },
+          colors: ['#c9a84c', '#e0c56e', '#a68b3a', '#22c55e', '#4ade80'],
+        });
+
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      };
+      frame();
+    }
+  }, [submitStatus]);
 
   const handleCopy = async () => {
     try {
@@ -33,7 +85,7 @@ const PaymentModal = ({ isOpen, onClose, selectedPlan }: PaymentModalProps) => {
   };
 
   const handlePaymentComplete = async () => {
-    if (!telegramUsername.trim()) return;
+    if (!telegramUsername.trim() || !txId.trim()) return;
 
     setSubmitStatus('submitting');
     setErrorMessage('');
@@ -67,6 +119,8 @@ const PaymentModal = ({ isOpen, onClose, selectedPlan }: PaymentModalProps) => {
     setTelegramUsername('');
     setTxId('');
     setErrorMessage('');
+    setCopied(false);
+    setCurrentStep(1);
     onClose();
   };
 
@@ -95,11 +149,56 @@ const PaymentModal = ({ isOpen, onClose, selectedPlan }: PaymentModalProps) => {
           </button>
         </div>
 
+        {/* Progress Bar */}
+        <div className="px-5 pt-4">
+          <div className="flex items-center justify-between mb-2">
+            {STEPS.map((step, index) => (
+              <div key={step.id} className="flex items-center flex-1">
+                <div className="flex flex-col items-center">
+                  <div
+                    className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 ${
+                      currentStep >= step.id
+                        ? 'bg-gradient-to-r from-[var(--gold)] to-[var(--gold-dark)] text-black'
+                        : 'bg-[var(--glass-border)] text-[var(--foreground-muted)]'
+                    }`}
+                  >
+                    {currentStep > step.id ? (
+                      <Check className="w-4 h-4" />
+                    ) : (
+                      step.id
+                    )}
+                  </div>
+                  <span
+                    className={`text-[10px] mt-1 transition-colors ${
+                      currentStep >= step.id
+                        ? 'text-[var(--gold)]'
+                        : 'text-[var(--foreground-muted)]'
+                    }`}
+                  >
+                    {step.label}
+                  </span>
+                </div>
+                {index < STEPS.length - 1 && (
+                  <div className="flex-1 mx-2 mb-4">
+                    <div className="h-1 rounded-full bg-[var(--glass-border)] overflow-hidden">
+                      <div
+                        className={`h-full bg-gradient-to-r from-[var(--gold)] to-[var(--gold-dark)] transition-all duration-500 ${
+                          currentStep > step.id ? 'w-full' : 'w-0'
+                        }`}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
         <div className="p-5 space-y-5">
           {submitStatus === 'success' ? (
             <div className="text-center py-8">
               <div className="flex items-center justify-center mb-4">
-                <div className="w-16 h-16 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center">
+                <div className="w-16 h-16 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center animate-bounce">
                   <CheckCircle className="w-8 h-8 text-green-400" />
                 </div>
               </div>
