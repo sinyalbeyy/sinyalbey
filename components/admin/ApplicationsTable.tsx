@@ -34,7 +34,7 @@ export default function ApplicationsTable({
             <th className="px-4 py-3 text-xs font-medium text-[var(--foreground-muted)] uppercase tracking-wider">Tarih</th>
             <th className="px-4 py-3 text-xs font-medium text-[var(--foreground-muted)] uppercase tracking-wider">Kaynak</th>
             <th className="px-4 py-3 text-xs font-medium text-[var(--foreground-muted)] uppercase tracking-wider">Telegram</th>
-            <th className="px-4 py-3 text-xs font-medium text-[var(--foreground-muted)] uppercase tracking-wider">UID</th>
+            <th className="px-4 py-3 text-xs font-medium text-[var(--foreground-muted)] uppercase tracking-wider">UID / TxID</th>
             <th className="px-4 py-3 text-xs font-medium text-[var(--foreground-muted)] uppercase tracking-wider">Plan</th>
             <th className="px-4 py-3 text-xs font-medium text-[var(--foreground-muted)] uppercase tracking-wider">Durum</th>
             <th className="px-4 py-3 text-xs font-medium text-[var(--foreground-muted)] uppercase tracking-wider">Not</th>
@@ -95,7 +95,12 @@ export default function ApplicationsTable({
                 </div>
               </td>
               <td className="px-4 py-3 text-sm text-[var(--foreground-muted)]">
-                {app.bitgetUid || '-'}
+                {app.bitgetUid ? (
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-mono text-xs">{app.bitgetUid}</span>
+                    <CopyButton text={app.bitgetUid} />
+                  </div>
+                ) : '-'}
               </td>
               <td className="px-4 py-3 text-sm text-[var(--foreground-muted)]">
                 {app.selectedPlan || '-'}

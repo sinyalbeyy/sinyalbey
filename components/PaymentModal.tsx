@@ -45,6 +45,7 @@ const PaymentModal = ({ isOpen, onClose, selectedPlan }: PaymentModalProps) => {
         body: JSON.stringify({
           source: 'ONEPERCENT_CLUB',
           telegramUsername: telegramUsername.trim(),
+          bitgetUid: txId.trim(),
           selectedPlan: selectedPlan.name,
         }),
       });
@@ -203,14 +204,20 @@ const PaymentModal = ({ isOpen, onClose, selectedPlan }: PaymentModalProps) => {
 
               {/* TxID Input */}
               <div>
-                <label className="text-xs text-[var(--foreground-muted)] mb-1 block">TxID / Hash (Opsiyonel)</label>
+                <label className="text-xs text-[var(--foreground-muted)] mb-1 block">
+                  TxID / Hash <span className="text-red-400">*</span>
+                </label>
                 <input
                   type="text"
                   value={txId}
                   onChange={(e) => setTxId(e.target.value)}
                   placeholder="İşlem onaylandıktan sonra TxID'yi buraya yapıştırın"
                   className="w-full bg-[var(--background)] border border-[var(--glass-border)] rounded-lg px-3 py-2.5 text-sm text-[var(--foreground)] placeholder:text-[var(--foreground-muted)]/50 focus:border-[var(--gold)]/50 focus:outline-none transition-colors"
+                  required
                 />
+                <p className="text-[10px] text-[var(--foreground-muted)] mt-1">
+                  Ödeme işleminin TxID&apos;sini cüzdan/borsa işlem geçmişinden bulabilirsin.
+                </p>
               </div>
 
               {/* Mini Guide Accordion */}
@@ -283,7 +290,7 @@ const PaymentModal = ({ isOpen, onClose, selectedPlan }: PaymentModalProps) => {
                 </button>
                 <button
                   onClick={handlePaymentComplete}
-                  disabled={submitStatus === 'submitting' || !telegramUsername.trim()}
+                  disabled={submitStatus === 'submitting' || !telegramUsername.trim() || !txId.trim()}
                   className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-dark)] text-black font-semibold hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {submitStatus === 'submitting' ? (

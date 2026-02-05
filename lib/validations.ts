@@ -17,8 +17,17 @@ const telegramUsername = z
 const bitgetUid = z
   .string()
   .trim()
+  .min(1, 'Bitget UID gereklidir.')
   .regex(/^\d+$/, 'Bitget UID sadece rakam içermelidir.')
   .max(20, 'Bitget UID en fazla 20 karakter olabilir.')
+  .transform(sanitizeHtml);
+
+const txId = z
+  .string()
+  .trim()
+  .min(1, 'TxID gereklidir.')
+  .regex(/^[a-zA-Z0-9]+$/, 'TxID sadece harf ve rakam içermelidir.')
+  .max(100, 'TxID en fazla 100 karakter olabilir.')
   .transform(sanitizeHtml);
 
 const selectedPlan = z.string().trim().min(1, 'Plan seçimi gereklidir.').transform(sanitizeHtml);
@@ -33,7 +42,7 @@ const bitgetClubSchema = z.object({
 const onepercentClubSchema = z.object({
   source: z.literal(Source.ONEPERCENT_CLUB),
   telegramUsername,
-  bitgetUid: z.string().trim().transform(sanitizeHtml).optional(),
+  bitgetUid: txId,
   selectedPlan,
 });
 
