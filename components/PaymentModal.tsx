@@ -389,7 +389,7 @@ const PaymentModal = ({ isOpen, onClose, selectedPlan }: PaymentModalProps) => {
                 </button>
                 <button
                   onClick={handlePaymentComplete}
-                  disabled={submitStatus === 'submitting' || !telegramUsername.trim() || !txId.trim()}
+                  disabled={submitStatus === 'submitting' || !telegramUsername.trim()}
                   className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-dark)] text-black font-semibold hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {submitStatus === 'submitting' ? (
