@@ -5,6 +5,7 @@ import SystemBlock from "@/components/sections/SystemBlock";
 import PerformanceBlock from "@/components/sections/PerformanceBlock";
 import Testimonials from "@/components/sections/Testimonials";
 import MiniFaq from "@/components/sections/MiniFaq";
+import IadeCta from "@/components/sections/IadeCta";
 import ScrollReveal from "@/components/ScrollReveal";
 
 export default function Home() {
@@ -26,6 +27,9 @@ export default function Home() {
       </ScrollReveal>
       <ScrollReveal delay={100}>
         <MiniFaq />
+      </ScrollReveal>
+      <ScrollReveal delay={100}>
+        <IadeCta />
       </ScrollReveal>
     </>
   );

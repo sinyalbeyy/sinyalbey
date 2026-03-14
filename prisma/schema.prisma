@@ -35,3 +35,13 @@ model Application {
   @@index([status])
   @@index([createdAt])
 }
+
+model CekimTalebi {
+  id        Int      @id @default(autoincrement())
+  uid       String
+  rebate    String
+  address   String
+  donemler  String
+  durum     String   @default("beklemede")
+  createdAt DateTime @default(now())
+}

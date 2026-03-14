@@ -47,3 +47,11 @@ export function applicationRateLimit(ip: string): RateLimitResult {
 export function loginRateLimit(ip: string): RateLimitResult {
   return checkRateLimit(`login:${ip}`, 5, 15 * 60 * 1000);
 }
+
+export function uidSorguRateLimit(ip: string): RateLimitResult {
+  return checkRateLimit(`uid:${ip}`, 10, 60 * 1000);
+}
+
+export function cekimTalebiRateLimit(ip: string): RateLimitResult {
+  return checkRateLimit(`cekim:${ip}`, 10, 60 * 1000);
+}

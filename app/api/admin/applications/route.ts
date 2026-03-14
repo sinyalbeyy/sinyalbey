@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { listApplicationsSchema } from '@/lib/validations';
+import { getAuthCookie } from '@/lib/auth';
 
 const PAGE_SIZE = 20;
 
 export async function GET(request: NextRequest) {
+  const auth = await getAuthCookie();
+  if (!auth) return NextResponse.json({ error: 'Yetkisiz.' }, { status: 401 });
+
   try {
     const { searchParams } = new URL(request.url);
 

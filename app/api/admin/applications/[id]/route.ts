@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { updateApplicationSchema } from '@/lib/validations';
+import { getAuthCookie } from '@/lib/auth';
 
 const CUID_REGEX = /^c[a-z0-9]{24}$/;
 
@@ -8,6 +9,9 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const auth = await getAuthCookie();
+  if (!auth) return NextResponse.json({ error: 'Yetkisiz.' }, { status: 401 });
+
   try {
     const { id } = await params;
 
