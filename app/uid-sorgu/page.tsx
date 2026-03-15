@@ -184,6 +184,33 @@ export default function UidSorguPage() {
           </p>
         </div>
 
+        {/* UID Input */}
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={uid}
+            onChange={(e) => setUid(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleSorgu()}
+            placeholder="Bitget UID numaranız"
+            className="flex-1 bg-zinc-900 border border-zinc-800 text-white placeholder-zinc-600 rounded-xl px-4 py-3 text-sm outline-none focus:border-zinc-600 transition-all"
+          />
+          <button
+            onClick={handleSorgu}
+            disabled={loading || !uid.trim()}
+            className="relative bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-400 hover:to-emerald-400 disabled:from-zinc-700 disabled:to-zinc-700 disabled:cursor-not-allowed text-white font-semibold text-sm px-6 py-3 rounded-xl transition-all duration-200 shadow-lg shadow-green-900/30"
+          >
+            {loading ? (
+              <span className="flex items-center gap-2">
+                <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                </svg>
+                Sorgulanıyor
+              </span>
+            ) : 'Sorgula'}
+          </button>
+        </div>
+
         {/* Bilgi Bölümü */}
         <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-5 space-y-5">
           <div>
@@ -257,33 +284,6 @@ export default function UidSorguPage() {
               Kontenjanımız sınırlıdır. Sadece ilk <span className="text-white font-semibold">200 kişi</span> bu ayrıcalıktan faydalanacaktır. Yalnızca <span className="text-red-400 font-semibold">10 yer</span> kaldı — sistem dolduğunda yeni üyelere kapanacaktır.
             </p>
           </div>
-        </div>
-
-        {/* UID Input */}
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={uid}
-            onChange={(e) => setUid(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSorgu()}
-            placeholder="Bitget UID numaranız"
-            className="flex-1 bg-zinc-900 border border-zinc-800 text-white placeholder-zinc-600 rounded-xl px-4 py-3 text-sm outline-none focus:border-zinc-600 transition-all"
-          />
-          <button
-            onClick={handleSorgu}
-            disabled={loading || !uid.trim()}
-            className="relative bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-400 hover:to-emerald-400 disabled:from-zinc-700 disabled:to-zinc-700 disabled:cursor-not-allowed text-white font-semibold text-sm px-6 py-3 rounded-xl transition-all duration-200 shadow-lg shadow-green-900/30"
-          >
-            {loading ? (
-              <span className="flex items-center gap-2">
-                <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
-                </svg>
-                Sorgulanıyor
-              </span>
-            ) : 'Sorgula'}
-          </button>
         </div>
 
         {error && (
