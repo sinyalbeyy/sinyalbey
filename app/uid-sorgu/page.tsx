@@ -73,6 +73,10 @@ export default function UidSorguPage() {
 
   const donemler = allDonemler.filter((d) => d.tip === activeTab);
 
+  // TR saati 21:00 öncesi uyarı
+  const trHour = new Date(Date.now() + 3 * 60 * 60 * 1000).getUTCHours();
+  const before21 = trHour < 21;
+
   async function handleSorgu() {
     if (!uid.trim()) return;
     setLoading(true);
@@ -183,6 +187,19 @@ export default function UidSorguPage() {
             Bitget UID&apos;ini gir, dönemi seç, iadenı talep et.
           </p>
         </div>
+
+        {/* 21:00 Uyarısı */}
+        {before21 && (
+          <div className="bg-zinc-900/80 border border-zinc-700 rounded-xl px-4 py-3 flex items-start gap-3">
+            <span className="text-yellow-400 text-base shrink-0">⏰</span>
+            <div>
+              <p className="text-white text-sm font-medium">Sorgulama saat 21:00&apos;den itibaren açılır</p>
+              <p className="text-zinc-500 text-xs mt-0.5">
+                Komisyonlar her gün Bitget tarafından saat 21:00&apos;de hesaplanır. Bugünün iadesini görmek için saat 21:00&apos;i bekleyin.
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* UID Input */}
         <div className="flex gap-2">
