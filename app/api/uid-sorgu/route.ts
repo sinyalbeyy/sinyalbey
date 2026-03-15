@@ -78,9 +78,14 @@ export async function GET(request: NextRequest) {
   const DAY_MS = 24 * 60 * 60 * 1000;
   const WEEK_MS = 7 * DAY_MS;
 
+  // TR saati 21:00'dan önce bugünü gösterme (komisyon henüz settle olmamış olabilir)
+  const TR_OFFSET = 3 * 60 * 60 * 1000;
+  const trHour = new Date(now + TR_OFFSET).getUTCHours();
+  const dailyStartI = trHour < 21 ? 1 : 0;
+
   // --- Günlük dönemler (son 7 gün, systemStart'tan önce başlamaz) ---
   const dailyPeriods: { startMs: number; endMs: number; donem: string; label: string }[] = [];
-  for (let i = 0; i < 7; i++) {
+  for (let i = dailyStartI; i < dailyStartI + 7; i++) {
     const d = new Date(now - i * DAY_MS);
     d.setHours(0, 0, 0, 0);
     const startMs = d.getTime();

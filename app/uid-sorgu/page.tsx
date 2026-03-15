@@ -184,6 +184,81 @@ export default function UidSorguPage() {
           </p>
         </div>
 
+        {/* Bilgi Bölümü */}
+        <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-5 space-y-5">
+          <div>
+            <h2 className="text-white font-bold text-lg mb-1">SinyalBey Komisyon İade Sistemi Nedir? 🚀</h2>
+            <p className="text-zinc-400 text-sm leading-relaxed">
+              Burada borsaya haraç vermek yok, hakkın olanı geri almak var! İşte bilmen gereken 3 temel kural:
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            <div className="flex gap-3">
+              <span className="text-green-400 font-bold text-sm shrink-0 mt-0.5">✓</span>
+              <div>
+                <p className="text-white text-sm font-semibold">Grup Şartı Yok</p>
+                <p className="text-zinc-500 text-xs leading-relaxed mt-0.5">
+                  İade almak için VIP gruba veya herhangi bir topluluğa katılman gerekmiyor. Tek şart; benim referansımla kayıt olman.
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <span className="text-green-400 font-bold text-sm shrink-0 mt-0.5">✓</span>
+              <div>
+                <p className="text-white text-sm font-semibold">Kâr/Zarar Fark Etmez</p>
+                <p className="text-zinc-500 text-xs leading-relaxed mt-0.5">
+                  İşlemin ister kârla kapansın ister zararla; borsa o komisyonu her türlü keser. Biz o kesilen parayı borsadan söküp alıyor ve sana geri veriyoruz.
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <span className="text-green-400 font-bold text-sm shrink-0 mt-0.5">✓</span>
+              <div>
+                <p className="text-white text-sm font-semibold">Her Gün Nakit Çekim</p>
+                <p className="text-zinc-500 text-xs leading-relaxed mt-0.5">
+                  İçeride biriken iadelerini her gün takip edebilir, sitemiz üzerinden çekim talebi oluşturarak nakit olarak cüzdanına çekebilirsin.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t border-zinc-800 pt-4">
+            <p className="text-white text-sm font-semibold mb-3">Nasıl Yapılır? (3 Basit Adım)</p>
+            <div className="space-y-2">
+              {[
+                { step: '1', title: 'Kayıt Ol', desc: 'Verilen referans linkiyle borsada hesabını aç. (Zaten hesabın varsa, silip 24 saat sonra yeniden açabilirsin.)' },
+                { step: '2', title: 'İşlem Yap', desc: 'Her gün yaptığın işlemlerden komisyonun sistemde otomatik biriksin.' },
+                { step: '3', title: 'Sorgula ve Çek', desc: 'UID numaranı sitemizden sorgula, biriken parayı gör ve "Çek" butonuna bas!' },
+              ].map(({ step, title, desc }) => (
+                <div key={step} className="flex gap-3 items-start">
+                  <span className="w-5 h-5 rounded-full bg-green-500/20 text-green-400 text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">{step}</span>
+                  <div>
+                    <span className="text-white text-sm font-medium">{title}: </span>
+                    <span className="text-zinc-500 text-xs">{desc}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-red-950/30 border border-red-800/40 rounded-xl px-4 py-3 space-y-2">
+            <div className="flex items-center justify-between">
+              <p className="text-red-400 text-xs font-semibold">⚠️ Kontenjan Dolmak Üzere!</p>
+              <span className="text-red-400 text-xs font-bold">190 / 200</span>
+            </div>
+            <div className="w-full bg-zinc-800 rounded-full h-2 overflow-hidden">
+              <div
+                className="h-2 rounded-full bg-gradient-to-r from-red-500 to-orange-400"
+                style={{ width: '95%' }}
+              />
+            </div>
+            <p className="text-zinc-500 text-xs leading-relaxed">
+              Kontenjanımız sınırlıdır. Sadece ilk <span className="text-white font-semibold">200 kişi</span> bu ayrıcalıktan faydalanacaktır. Yalnızca <span className="text-red-400 font-semibold">10 yer</span> kaldı — sistem dolduğunda yeni üyelere kapanacaktır.
+            </p>
+          </div>
+        </div>
+
         {/* UID Input */}
         <div className="flex gap-2">
           <input
