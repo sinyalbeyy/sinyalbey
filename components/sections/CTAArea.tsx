@@ -24,6 +24,15 @@ const CTAArea = () => {
         </span>
       </a>
 
+      {/* İade CTA */}
+      <Link
+        href="/uid-sorgu"
+        className="group flex items-center justify-center gap-2 w-full mt-3 py-3 px-6 rounded-xl border border-emerald-500/30 bg-emerald-500/5 text-emerald-400 text-sm font-medium transition-all duration-300 hover:bg-emerald-500/10 hover:border-emerald-500/50"
+      >
+        💰 Komisyon İademi Sorgula
+        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+      </Link>
+
       {/* Secondary CTAs */}
       <div className="grid grid-cols-2 gap-3 mt-3">
         <Link

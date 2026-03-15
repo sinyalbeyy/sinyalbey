@@ -58,6 +58,9 @@ const Header = () => {
             <Link href="/one-percent-club" className="text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors text-[13px] px-3 py-1.5">
               %1 Club
             </Link>
+            <Link href="/uid-sorgu" className="text-[var(--foreground-muted)] hover:text-emerald-400 transition-colors text-[13px] px-3 py-1.5">
+              İade Sorgula
+            </Link>
             <Link href="/bitget-elite" className="btn-gold-glossy text-[12px] py-1.5 px-4 font-medium">
               VIP Bitget
             </Link>
@@ -125,6 +128,13 @@ const Header = () => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 %1 Club
+              </Link>
+              <Link
+                href="/uid-sorgu"
+                className="text-emerald-400 hover:text-emerald-300 transition-colors py-2.5 px-1 text-sm font-medium"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                💰 İade Sorgula
               </Link>
             </div>
             <div className="mt-3 pt-3 border-t border-[rgba(255,255,255,0.04)]">
