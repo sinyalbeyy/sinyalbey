@@ -254,7 +254,7 @@ export default function UidSorguPage() {
             <p className="text-white text-sm font-semibold mb-3">Nasıl Yapılır? (3 Basit Adım)</p>
             <div className="space-y-2">
               {[
-                { step: '1', title: 'Kayıt Ol', desc: 'Verilen referans linkiyle borsada hesabını aç. (Zaten hesabın varsa, silip 24 saat sonra yeniden açabilirsin.)' },
+                { step: '1', title: 'Kayıt Ol', desc: 'Aşağıdaki referans linkiyle Bitget\'te hesabını aç.' },
                 { step: '2', title: 'İşlem Yap', desc: 'Her gün yaptığın işlemlerden komisyonun sistemde otomatik biriksin.' },
                 { step: '3', title: 'Sorgula ve Çek', desc: 'UID numaranı sitemizden sorgula, biriken parayı gör ve "Çek" butonuna bas!' },
               ].map(({ step, title, desc }) => (
@@ -266,6 +266,23 @@ export default function UidSorguPage() {
                   </div>
                 </div>
               ))}
+            </div>
+
+            {/* Kayıt Linki */}
+            <div className="mt-4 bg-zinc-950 border border-zinc-700 rounded-xl p-4 space-y-3">
+              <p className="text-white text-sm font-semibold">Kayıt Linki</p>
+              <p className="text-zinc-500 text-xs leading-relaxed">
+                İade sisteminin çalışması için <span className="text-white font-medium">benim referansımla</span> kayıtlı olman şart.
+                Başka biriyle kaydolduysan hesabını sil, <span className="text-white font-medium">24 saat bekle</span> ve aşağıdaki linkle yeni hesap aç.
+              </p>
+              <a
+                href="https://partner.bitget.com/bg/4EAXT6"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-400 hover:to-emerald-400 text-white font-semibold text-sm py-2.5 rounded-xl transition-all duration-200 shadow-lg shadow-green-900/20"
+              >
+                Bitget&apos;e Kayıt Ol →
+              </a>
             </div>
           </div>
 
