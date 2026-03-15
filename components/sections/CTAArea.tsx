@@ -51,9 +51,9 @@ const CTAArea = () => {
       {/* FOMO Performance Banner */}
       <div className="mt-4 glass-card p-3 border-green-500/30 bg-gradient-to-r from-green-500/10 to-transparent">
         <div className="flex items-center justify-center gap-3">
-          <span className="text-green-400 text-2xl font-bold">+%1295,23</span>
+          <span className="text-green-400 text-2xl font-bold">+%418</span>
           <div className="text-left">
-            <p className="text-[10px] text-[var(--foreground)] font-medium">Bu Ay Toplam Getiri</p>
+            <p className="text-[10px] text-[var(--foreground)] font-medium">Mart 2026 Toplam Getiri</p>
             <p className="text-[8px] text-[var(--foreground-muted)]">Seçilmiş işlemler bazında</p>
           </div>
         </div>

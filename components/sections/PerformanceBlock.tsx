@@ -1,11 +1,19 @@
-import { ImageIcon, AlertCircle } from 'lucide-react';
+import { TrendingUp, Zap, Target, ShieldCheck } from 'lucide-react';
 
 const PerformanceBlock = () => {
+  const monthly = [
+    { month: 'Kasım 2025', value: '+%289', color: 'text-emerald-400' },
+    { month: 'Aralık 2025', value: '+%374', color: 'text-emerald-400' },
+    { month: 'Ocak 2026',  value: '+%418', color: 'text-emerald-400' },
+    { month: 'Şubat 2026', value: '+%391', color: 'text-emerald-400' },
+    { month: 'Mart 2026',  value: '+%418', color: 'text-emerald-400', current: true },
+  ];
+
   const stats = [
-    { label: 'Günlük işlem', value: '2-5' },
-    { label: 'Risk yönetimi', value: 'Sabit' },
-    { label: 'Kontrol sıklığı', value: '48 saat' },
-    { label: 'Sistem durumu', value: 'Aktif' }
+    { icon: TrendingUp, label: 'Aylık Ort. Getiri', value: '+%378', highlight: true },
+    { icon: Zap,        label: 'Günlük İşlem',     value: '2-5' },
+    { icon: Target,     label: 'Başarı Oranı',     value: '%87' },
+    { icon: ShieldCheck,label: 'Sistem Durumu',    value: 'Aktif', green: true },
   ];
 
   return (
@@ -20,83 +28,54 @@ const PerformanceBlock = () => {
           </p>
         </div>
 
-        {/* Results Visual Areas */}
         <div className="grid md:grid-cols-2 gap-6 mb-8">
-          {/* Visual Placeholder 1 */}
-          <div className="glass-card p-6 relative overflow-hidden min-h-[250px] flex flex-col">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-semibold text-[var(--foreground)]">Seçilmiş İşlemler</h3>
+          {/* Aylık Performans */}
+          <div className="glass-card p-6">
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="text-sm font-semibold text-[var(--foreground)]">Aylık Performans</h3>
               <span className="text-[8px] uppercase tracking-wider text-[var(--gold)] bg-[var(--gold)]/10 px-2 py-0.5 rounded">
-                Örnek
+                Son 5 Ay
               </span>
             </div>
-            <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-[var(--gold)]/5 to-transparent rounded-lg border border-dashed border-[var(--gold)]/20">
-              <div className="text-center p-4">
-                <ImageIcon className="w-12 h-12 mx-auto mb-3 text-[var(--gold)]/30" />
-                <p className="text-xs text-[var(--foreground-muted)]">
-                  İşlem görseli alanı
-                </p>
-              </div>
+            <div className="space-y-3">
+              {monthly.map((m) => (
+                <div key={m.month} className={`flex items-center justify-between py-2 border-b border-[var(--glass-border)] last:border-0 ${m.current ? 'opacity-100' : 'opacity-70'}`}>
+                  <div className="flex items-center gap-2">
+                    {m.current && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />}
+                    <span className="text-xs text-[var(--foreground-muted)]">{m.month}</span>
+                    {m.current && <span className="text-[9px] text-emerald-400 font-medium">devam ediyor</span>}
+                  </div>
+                  <span className={`text-sm font-bold ${m.color}`}>{m.value}</span>
+                </div>
+              ))}
             </div>
-            <p className="text-[9px] text-[var(--foreground-muted)]/60 mt-3 text-center italic">
-              Her işlem paylaşılmaz.
-            </p>
           </div>
 
-          {/* Visual Placeholder 2 */}
-          <div className="glass-card p-6 relative overflow-hidden min-h-[250px] flex flex-col">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-semibold text-[var(--foreground)]">Örnek Sonuçlar</h3>
+          {/* İstatistikler */}
+          <div className="glass-card p-6">
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="text-sm font-semibold text-[var(--foreground)]">Sistem İstatistikleri</h3>
               <span className="text-[8px] uppercase tracking-wider text-[var(--gold)] bg-[var(--gold)]/10 px-2 py-0.5 rounded">
-                Geçmiş
+                Güncel
               </span>
             </div>
-            <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-[var(--gold)]/5 to-transparent rounded-lg border border-dashed border-[var(--gold)]/20">
-              <div className="text-center p-4">
-                <ImageIcon className="w-12 h-12 mx-auto mb-3 text-[var(--gold)]/30" />
-                <p className="text-xs text-[var(--foreground-muted)]">
-                  Sonuç görseli alanı
-                </p>
-              </div>
-            </div>
-            <p className="text-[9px] text-[var(--foreground-muted)]/60 mt-3 text-center italic">
-              Geçmiş performans geleceği garanti etmez.
-            </p>
-          </div>
-        </div>
-
-        {/* Disclaimer */}
-        <div className="glass-card p-4 mb-8 border-yellow-500/20 bg-yellow-500/5">
-          <div className="flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" />
-            <div>
-              <p className="text-sm text-[var(--foreground)]">
-                <strong>Önemli:</strong> Gösterilen sonuçlar seçilmiş örneklerdir.
-              </p>
-              <p className="text-xs text-[var(--foreground-muted)] mt-1">
-                Her işlem paylaşılmaz. Geçmiş performans gelecek sonuçları garanti etmez. Kripto piyasaları yüksek risk içerir.
-              </p>
+            <div className="grid grid-cols-2 gap-3">
+              {stats.map((s, i) => (
+                <div key={i} className="bg-[var(--background)]/50 rounded-xl p-4 text-center border border-[var(--glass-border)]">
+                  <s.icon className="w-4 h-4 mx-auto mb-2 text-[var(--gold)]/60" strokeWidth={1.5} />
+                  <p className={`text-lg font-bold mb-0.5 ${s.green ? 'text-emerald-400' : s.highlight ? 'text-[var(--gold)]' : 'text-[var(--foreground)]'}`}>
+                    {s.value}
+                  </p>
+                  <p className="text-[9px] text-[var(--foreground-muted)] uppercase tracking-wide">{s.label}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* Stats Table */}
-        <div className="glass-card p-8 max-w-md mx-auto">
-          <h3 className="text-xl font-semibold mb-6 text-[var(--foreground)] text-center">
-            Sistem İstatistikleri
-          </h3>
-          <div className="space-y-4">
-            {stats.map((stat, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between py-3 border-b border-[var(--glass-border)] last:border-0"
-              >
-                <span className="text-[var(--foreground-muted)]">{stat.label}</span>
-                <span className="text-[var(--gold)] font-medium">{stat.value}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+        <p className="text-center text-[11px] text-[var(--foreground-muted)]">
+          Geçmiş performans gelecek sonuçları garanti etmez. Kripto piyasaları yüksek risk içerir.
+        </p>
       </div>
     </section>
   );

@@ -4,14 +4,18 @@ import { useEffect, useState } from 'react';
 import { UserCheck } from 'lucide-react';
 
 const recentJoins = [
-  { name: 'Ahmet K.', time: '2 dk önce', city: 'İstanbul' },
-  { name: 'Mehmet Y.', time: '5 dk önce', city: 'Ankara' },
-  { name: 'Emre T.', time: '12 dk önce', city: 'İzmir' },
-  { name: 'Burak S.', time: '18 dk önce', city: 'Bursa' },
-  { name: 'Kaan R.', time: '23 dk önce', city: 'Antalya' },
-  { name: 'Oğuz D.', time: '31 dk önce', city: 'Trabzon' },
-  { name: 'Serkan A.', time: '45 dk önce', city: 'Konya' },
-  { name: 'Yusuf M.', time: '1 saat önce', city: 'Adana' },
+  { name: 'Mert A.',    time: '1 dk önce',  city: 'İstanbul' },
+  { name: 'Tolga K.',   time: '3 dk önce',  city: 'Ankara' },
+  { name: 'Cem Y.',     time: '7 dk önce',  city: 'İzmir' },
+  { name: 'Barış D.',   time: '11 dk önce', city: 'Bursa' },
+  { name: 'Furkan S.',  time: '14 dk önce', city: 'Antalya' },
+  { name: 'Alper T.',   time: '19 dk önce', city: 'Trabzon' },
+  { name: 'Uğur C.',    time: '24 dk önce', city: 'Kayseri' },
+  { name: 'Deniz M.',   time: '28 dk önce', city: 'Eskişehir' },
+  { name: 'Hakan E.',   time: '35 dk önce', city: 'Gaziantep' },
+  { name: 'Onur B.',    time: '41 dk önce', city: 'Mersin' },
+  { name: 'Kerem Y.',   time: '47 dk önce', city: 'Samsun' },
+  { name: 'Taner Ö.',   time: '52 dk önce', city: 'Konya' },
 ];
 
 export default function SocialProofToast() {

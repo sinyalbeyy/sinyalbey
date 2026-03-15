@@ -4,12 +4,12 @@ import { useEffect, useState } from 'react';
 import { Flame } from 'lucide-react';
 
 export default function SpotsCounter() {
-  const [spots, setSpots] = useState(7);
+  const [spots, setSpots] = useState(4);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setSpots(prev => {
-        if (prev <= 3) return prev;
+        if (prev <= 2) return prev;
         if (Math.random() > 0.7) return prev - 1;
         return prev;
       });
@@ -26,7 +26,7 @@ export default function SpotsCounter() {
         <div className="flex items-center gap-2.5">
           <Flame className="w-4 h-4 text-orange-400/80" strokeWidth={1.5} />
           <span className="text-xs font-semibold text-[var(--foreground)] tracking-tight">
-            Şubat Kontenjanı
+            Mart Kontenjanı
           </span>
         </div>
         <span className="text-xs text-[var(--foreground-muted)]">
@@ -34,7 +34,6 @@ export default function SpotsCounter() {
         </span>
       </div>
 
-      {/* Progress bar */}
       <div className="h-1.5 rounded-full bg-[var(--background)] overflow-hidden">
         <div
           className="h-full rounded-full transition-all duration-1000 ease-out"

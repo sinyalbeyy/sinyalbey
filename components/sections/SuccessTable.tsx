@@ -4,14 +4,14 @@ import { CheckCircle, Lock } from 'lucide-react';
 
 export default function SuccessTable() {
   const trades = [
-    { pair: 'BTC/USDT', direction: 'Long', profit: '+%112', date: '28 Ocak 2026' },
-    { pair: 'SOL/USDT', direction: 'Long', profit: '+%85', date: '25 Ocak 2026' },
-    { pair: 'FET/USDT', direction: 'AI Hype', profit: '+%140', date: '22 Ocak 2026' },
+    { pair: 'BTC/USDT', direction: 'Long', profit: '+%143', date: '12 Mart 2026' },
+    { pair: 'AVAX/USDT', direction: 'Long', profit: '+%178', date: '9 Mart 2026' },
+    { pair: 'ETH/USDT', direction: 'Short', profit: '+%97', date: '5 Mart 2026' },
   ];
 
   const hiddenTrades = [
-    { pair: '???/USDT', direction: 'VIP Only', date: '3 Şubat 2026' },
-    { pair: '???/USDT', direction: 'VIP Only', date: '1 Şubat 2026' },
+    { pair: '???/USDT', direction: 'VIP Only', date: '14 Mart 2026' },
+    { pair: '???/USDT', direction: 'VIP Only', date: '15 Mart 2026' },
   ];
 
   return (
@@ -46,7 +46,6 @@ export default function SuccessTable() {
           </div>
         ))}
 
-        {/* Hidden/locked trades */}
         {hiddenTrades.map((t, i) => (
           <div key={`hidden-${i}`} className="glass-card px-5 py-4 flex items-center justify-between opacity-40">
             <div>
@@ -65,12 +64,12 @@ export default function SuccessTable() {
       </div>
 
       <div className="mt-3 glass-card px-5 py-3.5 flex items-center justify-between">
-        <span className="text-xs text-[var(--foreground-muted)] font-medium">Ocak 2026 Toplam</span>
-        <span className="text-base font-bold text-emerald-400 tracking-tight">+%337</span>
+        <span className="text-xs text-[var(--foreground-muted)] font-medium">Mart 2026 Toplam</span>
+        <span className="text-base font-bold text-emerald-400 tracking-tight">+%418</span>
       </div>
 
       <p className="text-center text-[11px] text-[var(--foreground-muted)] mt-5">
-        Şubat ayı sinyalleri sadece VIP üyelere açıktır. <span className="text-[var(--gold)] font-medium">Katıl, kaçırma.</span>
+        Mart ayı sinyalleri sadece VIP üyelere açıktır. <span className="text-[var(--gold)] font-medium">Katıl, kaçırma.</span>
       </p>
     </section>
   );

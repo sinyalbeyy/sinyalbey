@@ -49,7 +49,7 @@ export default function LiveActivityBar() {
         <div className="flex items-center gap-2 text-[13px]">
           <TrendingUp className="w-3.5 h-3.5 text-emerald-400/70" strokeWidth={1.5} />
           <span className="text-[var(--foreground-muted)]">
-            Ocak: <span className="text-emerald-400 font-medium">+%337</span>
+            Mart: <span className="text-emerald-400 font-medium">+%418</span>
           </span>
         </div>
       </div>
