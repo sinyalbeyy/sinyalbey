@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface SorguResult {
   uid: string;
@@ -30,6 +30,33 @@ function formatDateTR(isoDate: string): string {
   return `${d.getUTCDate()} ${TR_MONTHS_SHORT[d.getUTCMonth()]}`;
 }
 
+function useCountUp(target: number, duration = 800) {
+  const [value, setValue] = useState(0);
+  const rafRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (target === 0) { setValue(0); return; }
+    const start = performance.now();
+    const tick = (now: number) => {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setValue(parseFloat((target * eased).toFixed(4)));
+      if (progress < 1) rafRef.current = requestAnimationFrame(tick);
+      else setValue(target);
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
+  }, [target, duration]);
+
+  return value;
+}
+
+function CountUp({ value }: { value: number }) {
+  const animated = useCountUp(value);
+  return <>{animated.toFixed(4)}</>;
+}
+
 function shortenAddress(addr: string) {
   if (addr.length < 12) return addr;
   return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
@@ -45,7 +72,13 @@ export default function UidSorguPage() {
   const [error, setError] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [accordionOpen, setAccordionOpen] = useState(false);
   const [gecmis, setGecmis] = useState<Talep[]>([]);
+
+  // TR saati 21:00 öncesi uyarı
+  const trHour = new Date(Date.now() + 3 * 60 * 60 * 1000).getUTCHours();
+  const before21 = trHour < 21;
 
   async function handleSorgu() {
     if (!uid.trim()) return;
@@ -53,6 +86,7 @@ export default function UidSorguPage() {
     setError(null);
     setResult(null);
     setSubmitted(false);
+    setVisible(false);
     setGecmis([]);
 
     try {
@@ -66,6 +100,7 @@ export default function UidSorguPage() {
         setError(sorguData.error || 'Bir hata oluştu.');
       } else {
         setResult(sorguData);
+        setTimeout(() => setVisible(true), 50);
       }
 
       if (gecmisRes.ok) {
@@ -131,9 +166,22 @@ export default function UidSorguPage() {
         <div className="text-center mb-2">
           <h1 className="text-3xl font-bold text-white tracking-tight mb-2">İade Sorgula</h1>
           <p className="text-zinc-500 text-sm">
-            Bitget UID&apos;ini gir, biriken iadenı talep et.
+            Bitget UID&apos;ini gir, dönemi seç, iadenı talep et.
           </p>
         </div>
+
+        {/* 21:00 Uyarısı */}
+        {before21 && (
+          <div className="bg-zinc-900/80 border border-zinc-700 rounded-xl px-4 py-3 flex items-start gap-3">
+            <span className="text-yellow-400 text-base shrink-0">⏰</span>
+            <div>
+              <p className="text-white text-sm font-medium">Sorgulama saat 21:00&apos;den itibaren açılır</p>
+              <p className="text-zinc-500 text-xs mt-0.5">
+                Komisyonlar her gün Bitget tarafından saat 21:00&apos;de hesaplanır. Bugünün iadesini görmek için saat 21:00&apos;i bekleyin.
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* UID Input */}
         <div className="flex gap-2">
@@ -148,7 +196,7 @@ export default function UidSorguPage() {
           <button
             onClick={handleSorgu}
             disabled={loading || !uid.trim()}
-            className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-400 hover:to-emerald-400 disabled:from-zinc-700 disabled:to-zinc-700 disabled:cursor-not-allowed text-white font-semibold text-sm px-6 py-3 rounded-xl transition-all duration-200 shadow-lg shadow-green-900/30"
+            className="relative bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-400 hover:to-emerald-400 disabled:from-zinc-700 disabled:to-zinc-700 disabled:cursor-not-allowed text-white font-semibold text-sm px-6 py-3 rounded-xl transition-all duration-200 shadow-lg shadow-green-900/30"
           >
             {loading ? (
               <span className="flex items-center gap-2">
@@ -162,6 +210,98 @@ export default function UidSorguPage() {
           </button>
         </div>
 
+        {/* Bilgi Bölümü */}
+        <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-5 space-y-5">
+          <div>
+            <h2 className="text-white font-bold text-lg mb-1">SinyalBey Komisyon İade Sistemi Nedir? 🚀</h2>
+            <p className="text-zinc-400 text-sm leading-relaxed">
+              Burada borsaya haraç vermek yok, hakkın olanı geri almak var! İşte bilmen gereken 3 temel kural:
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            <div className="flex gap-3">
+              <span className="text-green-400 font-bold text-sm shrink-0 mt-0.5">✓</span>
+              <div>
+                <p className="text-white text-sm font-semibold">Grup Şartı Yok</p>
+                <p className="text-zinc-500 text-xs leading-relaxed mt-0.5">
+                  İade almak için VIP gruba veya herhangi bir topluluğa katılman gerekmiyor. Tek şart; benim referansımla kayıt olman.
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <span className="text-green-400 font-bold text-sm shrink-0 mt-0.5">✓</span>
+              <div>
+                <p className="text-white text-sm font-semibold">Kâr/Zarar Fark Etmez</p>
+                <p className="text-zinc-500 text-xs leading-relaxed mt-0.5">
+                  İşlemin ister kârla kapansın ister zararla; borsa o komisyonu her türlü keser. Biz o kesilen parayı borsadan söküp alıyor ve sana geri veriyoruz.
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <span className="text-green-400 font-bold text-sm shrink-0 mt-0.5">✓</span>
+              <div>
+                <p className="text-white text-sm font-semibold">Her Gün Nakit Çekim</p>
+                <p className="text-zinc-500 text-xs leading-relaxed mt-0.5">
+                  İçeride biriken iadelerini her gün takip edebilir, sitemiz üzerinden çekim talebi oluşturarak nakit olarak cüzdanına çekebilirsin.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t border-zinc-800 pt-4">
+            <p className="text-white text-sm font-semibold mb-3">Nasıl Yapılır? (3 Basit Adım)</p>
+            <div className="space-y-2">
+              {[
+                { step: '1', title: 'Kayıt Ol', desc: 'Aşağıdaki referans linkiyle Bitget\'te hesabını aç.' },
+                { step: '2', title: 'İşlem Yap', desc: 'Her gün yaptığın işlemlerden komisyonun sistemde otomatik biriksin.' },
+                { step: '3', title: 'Sorgula ve Çek', desc: 'UID numaranı sitemizden sorgula, biriken parayı gör ve "Çek" butonuna bas!' },
+              ].map(({ step, title, desc }) => (
+                <div key={step} className="flex gap-3 items-start">
+                  <span className="w-5 h-5 rounded-full bg-green-500/20 text-green-400 text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">{step}</span>
+                  <div>
+                    <span className="text-white text-sm font-medium">{title}: </span>
+                    <span className="text-zinc-500 text-xs">{desc}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Kayıt Linki */}
+            <div className="mt-4 bg-zinc-950 border border-zinc-700 rounded-xl p-4 space-y-3">
+              <p className="text-white text-sm font-semibold">Kayıt Linki</p>
+              <p className="text-zinc-500 text-xs leading-relaxed">
+                İade sisteminin çalışması için <span className="text-white font-medium">benim referansımla</span> kayıtlı olman şart.
+                Başka biriyle kaydolduysan hesabını sil, <span className="text-white font-medium">24 saat bekle</span> ve aşağıdaki linkle yeni hesap aç.
+              </p>
+              <a
+                href="https://partner.bitget.com/bg/4EAXT6"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-400 hover:to-emerald-400 text-white font-semibold text-sm py-2.5 rounded-xl transition-all duration-200 shadow-lg shadow-green-900/20"
+              >
+                Bitget&apos;e Kayıt Ol →
+              </a>
+            </div>
+          </div>
+
+          <div className="bg-red-950/30 border border-red-800/40 rounded-xl px-4 py-3 space-y-2">
+            <div className="flex items-center justify-between">
+              <p className="text-red-400 text-xs font-semibold">⚠️ Kontenjan Dolmak Üzere!</p>
+              <span className="text-red-400 text-xs font-bold">190 / 200</span>
+            </div>
+            <div className="w-full bg-zinc-800 rounded-full h-2 overflow-hidden">
+              <div
+                className="h-2 rounded-full bg-gradient-to-r from-red-500 to-orange-400"
+                style={{ width: '95%' }}
+              />
+            </div>
+            <p className="text-zinc-500 text-xs leading-relaxed">
+              Kontenjanımız sınırlıdır. Sadece ilk <span className="text-white font-semibold">200 kişi</span> bu ayrıcalıktan faydalanacaktır. Yalnızca <span className="text-red-400 font-semibold">10 yer</span> kaldı — sistem dolduğunda yeni üyelere kapanacaktır.
+            </p>
+          </div>
+        </div>
+
         {error && (
           <div className="bg-red-950/60 border border-red-800/60 text-red-400 text-sm rounded-xl px-4 py-3">
             {error}
@@ -169,14 +309,23 @@ export default function UidSorguPage() {
         )}
 
         {/* Sonuç Kartı */}
-        {result && !submitted && (
-          <div className="bg-zinc-900/80 border border-zinc-800 rounded-2xl p-5 space-y-4">
+        {result && (
+          <div
+            style={{
+              opacity: visible ? 1 : 0,
+              transform: visible ? 'translateY(0)' : 'translateY(12px)',
+              transition: 'opacity 0.4s ease, transform 0.4s ease',
+            }}
+            className="bg-zinc-900/80 border border-zinc-800 rounded-2xl p-5 space-y-4"
+          >
             <div>
               <p className="text-zinc-500 text-xs mb-2">
                 {formatDateTR(result.startDate)} - bugün arası birikmiş iade
               </p>
               <div className="flex items-end gap-2">
-                <span className="text-green-400 font-bold text-3xl">{result.rebate}</span>
+                <span className="text-green-400 font-bold text-3xl">
+                  <CountUp value={rebateNum} />
+                </span>
                 <span className="text-green-400 font-semibold text-lg mb-0.5">USDT</span>
               </div>
               <p className="text-zinc-600 text-xs mt-1">İade (%80)</p>
@@ -194,7 +343,7 @@ export default function UidSorguPage() {
               </div>
             )}
 
-            {rebateNum >= 10 && (
+            {rebateNum >= 10 && !submitted && (
               <>
                 <div className="border-t border-zinc-800" />
 
@@ -264,6 +413,7 @@ export default function UidSorguPage() {
                   <div className="text-zinc-500 text-xs mt-0.5">
                     {shortenAddress(t.address)} · {new Date(t.createdAt).toLocaleDateString('tr-TR')}
                   </div>
+                  <div className="text-zinc-600 text-xs mt-0.5 truncate">{t.donemler}</div>
                 </div>
                 <span className={`shrink-0 inline-flex px-2.5 py-1 rounded-full text-xs font-semibold ${
                   t.durum === 'odendi' ? 'bg-green-900/60 text-green-400' : 'bg-yellow-900/60 text-yellow-400'
@@ -275,7 +425,34 @@ export default function UidSorguPage() {
           </div>
         )}
 
+        {/* Accordion */}
+        <div className="border border-zinc-800 rounded-xl overflow-hidden">
+          <button
+            onClick={() => setAccordionOpen((v) => !v)}
+            className="w-full flex items-center justify-between px-4 py-3.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-900/40 transition-colors"
+          >
+            <span>Nasıl hesaplanır?</span>
+            <svg className={`w-4 h-4 transition-transform duration-200 ${accordionOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          {accordionOpen && (
+            <div className="px-4 pb-4 text-zinc-500 text-sm leading-relaxed border-t border-zinc-800 pt-3">
+              Bitget referans komisyonunuzun <span className="text-white font-medium">%80&apos;i</span> sistem başlangıcından bugüne kadar hesaplanarak iade edilir.
+              UID numaranız üzerinden otomatik sorgulanır. Minimum çekim tutarı <span className="text-white font-medium">10 USDT</span>&apos;dir.
+              İadeler TRC-20 USDT olarak gönderilir.
+            </div>
+          )}
+        </div>
+
       </div>
+
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(8px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
     </div>
   );
 }
