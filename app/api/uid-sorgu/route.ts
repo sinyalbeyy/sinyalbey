@@ -21,7 +21,8 @@ async function fetchCommissions(
   secret: string,
   passphrase: string,
   startMs: number,
-  endMs: number
+  endMs: number,
+  amountField: string
 ): Promise<number> {
   const timestamp = Date.now().toString();
   const path = `/api/v2/broker/customer-commissions?uid=${uid}&startTime=${String(startMs)}&endTime=${String(endMs)}`;
@@ -44,8 +45,8 @@ async function fetchCommissions(
     throw new Error(data.msg || 'Bitget API hatası');
   }
 
-  const list: { totalRebateAmount?: string }[] = data.data?.commissionList ?? [];
-  return list.reduce((sum, item) => sum + parseFloat(item.totalRebateAmount ?? '0'), 0);
+  const list: Record<string, string>[] = data.data?.commissionList ?? [];
+  return list.reduce((sum, item) => sum + parseFloat(item[amountField] ?? '0'), 0);
 }
 
 export async function GET(request: NextRequest) {
@@ -117,14 +118,14 @@ export async function GET(request: NextRequest) {
     const [dailyResults, weeklyResults] = await Promise.all([
       Promise.all(
         dailyPeriods.map(async ({ startMs, endMs, donem, label }) => {
-          const total = await fetchCommissions(uid, apiKey, secret, passphrase, startMs, endMs);
+          const total = await fetchCommissions(uid, apiKey, secret, passphrase, startMs, endMs, 'dayTotalRebateAmount');
           const rebate = total * 0.25;
           return { donem, tip: 'gunluk' as const, label, totalFee: total.toFixed(4), rebate: rebate.toFixed(4) };
         })
       ),
       Promise.all(
         weeklyPeriods.map(async ({ startMs, endMs, donem, label }) => {
-          const total = await fetchCommissions(uid, apiKey, secret, passphrase, startMs, endMs);
+          const total = await fetchCommissions(uid, apiKey, secret, passphrase, startMs, endMs, 'rebateAmount');
           const rebate = total * 0.25;
           return { donem, tip: 'haftalik' as const, label, totalFee: total.toFixed(4), rebate: rebate.toFixed(4) };
         })
