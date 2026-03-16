@@ -34,13 +34,13 @@ export async function POST(request: NextRequest) {
 
     const donemlerStr = donemler.join(',');
 
-    // Duplicate kontrolü
+    // Duplicate kontrolü: aynı UID için beklemede talep varsa engelle
     const existing = await prisma.cekimTalebi.findFirst({
-      where: { uid: String(uid), donemler: donemlerStr },
+      where: { uid: String(uid), durum: 'beklemede' },
     });
     if (existing) {
       return NextResponse.json(
-        { error: 'Bu dönem için zaten talep oluşturdunuz.' },
+        { error: 'Bekleyen talebiniz var, önce işleme alınması gerekiyor.' },
         { status: 400 }
       );
     }
